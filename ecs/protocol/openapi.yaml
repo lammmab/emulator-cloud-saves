@@ -1,0 +1,47 @@
+paths:
+  /ping:
+    get:
+      summary: Server health check
+      responses:
+        '200':
+          description: OK
+
+  /upload:
+    post:
+      summary: Upload save zip
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                save_id:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Upload successful
+        '413':
+          description: File too large
+
+  /download/{save_id}:
+    get:
+      summary: Download save zip
+      parameters:
+        - in: path
+          name: save_id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Zip file returned
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Save not found
